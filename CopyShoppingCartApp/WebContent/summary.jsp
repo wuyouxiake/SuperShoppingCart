@@ -51,7 +51,6 @@
 <form class="form-horizontal" role="form" method="get" action="emptyCart">
 <input type="submit" name="submit" value="Reset Cart">
 </form>
-<p align="center"><b>Total: $${subtotal}</b></p>
 <a href="index.jsp">Home</a><br><br>
 </body>
 </html>
