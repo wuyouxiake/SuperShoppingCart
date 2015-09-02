@@ -5,7 +5,6 @@
 		<class>model.Product</class>
 		<class>model.Cartuser</class>
 		<class>model.UserProd</class>
-		<class>model.Myorder</class>
 		<class>model.Cartcomment</class>
 		<exclude-unlisted-classes>false</exclude-unlisted-classes>
 		<properties>

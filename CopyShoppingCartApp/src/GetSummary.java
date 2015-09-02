@@ -67,8 +67,8 @@ public class GetSummary extends HttpServlet {
 			
 			
 			fullList+="<li class=\"list-group-item\"><img src=\""+p.getPhotolink()
-            		+"\" style=\"width:120px;height:120px\"> <a href=\"GetProductDetail?p_name="
-            		+p.getPName().replace(" ", "%20")+"\">"+p.getPName()+"</a><br>  "
+            		+"\" style=\"width:120px;height:120px\"> <a href=\"GetProductDetail?id="
+            		+p.getId()+"\">"+p.getPName()+"</a><br>  "
             		+"<b>Price: $"+p.getPrice()+"</b><br>"
             		+"Qty: "+tempQty+"<br>"
             		+"Subtotal: $"+tempQty*p.getPrice()*1.00+"<br>"
