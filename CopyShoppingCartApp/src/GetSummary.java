@@ -81,7 +81,7 @@ public class GetSummary extends HttpServlet {
 				response.setContentType("text/html");
 
 				request.setAttribute("fullList", fullList);
-				request.setAttribute("subtotal", subtotal);
+				//request.setAttribute("subtotal", subtotal);
 				
 				getServletContext().getRequestDispatcher("/summary.jsp")
 						.forward(request, response);

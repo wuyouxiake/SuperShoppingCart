@@ -12,6 +12,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import postTools.DBUtil;
 import model.Product;
@@ -39,6 +40,7 @@ public class GetProduct extends HttpServlet {
 			HttpServletResponse response) throws ServletException, IOException {
 
 		EntityManager em = DBUtil.getEmFactory().createEntityManager();
+		HttpSession session = request.getSession(true);
 		String qString = "select p from Product p order by p.id";
 		TypedQuery<Product> q = em.createQuery(qString, Product.class);
 		List<Product> productList;
@@ -50,27 +52,33 @@ public class GetProduct extends HttpServlet {
 
 			String fullList = "";
 			for (int i = 0; i < productList.size(); i++) {
-				fullList+= "<form class=\"form-horizontal\" role=\"form\" method=\"get\" action=\"AddToCart\"><input type=\"hidden\" name=\"productid\" value=\""
-						+productList.get(i).getId()+"\">"
+				fullList+= "<form class=\"form-horizontal\" role=\"form\" method=\"get\" action=\"AddToCart\">"
+						+ "<input type=\"hidden\" name=\"productid\" value=\""+productList.get(i).getId()+"\">"
 						+ "<li class=\"list-group-item\"><img src=\""
 						+ productList.get(i).getPhotolink()
-						+ "\" style=\"width:120px;height:120px\"> <a href=\"GetProductDetail?p_name="
-						+ productList.get(i).getPName().replace(" ", "%20")
+						+ "\" style=\"width:120px;height:120px\"> <a href=\"GetProductDetail?id="
+						+ productList.get(i).getId()
 						+ "\">" + productList.get(i).getPName() + "</a><br>  "
 						+ productList.get(i).getDescription() + "<br><br>"
 						+ "<b>Price: $" + productList.get(i).getPrice()
-						+ "</b><br>" 
-						+"Qty: <input type=\"number\" name=\"quantity\" required><br>"
-						+"<input type=\"submit\" name=\"submit\" value=\"Add to cart\">"
-						+ "</li></form>";
+						+ "</b><br>";
+				
+				if(session.getAttribute("user_type")!=null){
+					fullList+="Qty: <input type=\"number\" name=\"quantity\" required><br>"
+							+"<input type=\"submit\" name=\"submit\" value=\"Add to cart\">"
+							+ "</li></form>";
+				}else{
+					fullList+="</li></form>";
+				}
+						
 
 			}
 
 			// Set response content type
 			response.setContentType("text/html");
 
-			request.setAttribute("fullList", fullList);
-
+			//request.setAttribute("fullList", fullList);
+			session.setAttribute("productList", productList);
 			getServletContext().getRequestDispatcher("/list.jsp").forward(
 					request, response);
 			fullList = "";

@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import postTools.DBUtil;
+import model.Cartcomment;
 import model.Product;
 
 /**
@@ -31,12 +32,12 @@ public class GetProductDetail extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		String p_name = request.getParameter("p_name");
+		long productid = Long.parseLong(request.getParameter("id"));
 		EntityManager em = DBUtil.getEmFactory().createEntityManager();
 //		
-		String qString = "select p from Product p where p.pName = ?1";
+		String qString = "select p from Product p where p.id = ?1";
 		TypedQuery<Product> q = em.createQuery(qString, Product.class);
-		q.setParameter(1, p_name);
+		q.setParameter(1, productid);
 		List<Product> productDetail;
 		try{
 			productDetail=q.getResultList();
@@ -51,18 +52,25 @@ public class GetProductDetail extends HttpServlet {
 					+"<li class=\"list-group-item\">Photo: <img src=\""+productDetail.get(i).getPhotolink()+
 					"\" style=\"width:120px;height:120px\"></li>"
 					+"<li class=\"list-group-item\">Description: "+productDetail.get(i).getDescription()+"</li>"
-					+"<li class=\"list-group-item\">Price: $"+productDetail.get(i).getPrice()+"</li>"
-					+"<li class=\"list-group-item\"><a href=\"AddToCart?productid="+productDetail.get(i).getId()
-					+"\"><b>Add To Cart</b></a>"
+					+"<li class=\"list-group-item\">Price: $"+productDetail.get(i).getPrice()
 					+"</li><br><br>";
             
         }
+		
+
+		String qString2 = "select c from Cartcomment c where c.productid = ?1";
+		TypedQuery<Cartcomment> q2 = em.createQuery(qString2, Cartcomment.class);
+		q2.setParameter(1, productid);
+		List<Cartcomment> commentList = q2.getResultList();
+		
 		
 
 		//Set response content type
 				response.setContentType("text/html");
 
 				request.setAttribute("fullList", fullList);
+				request.setAttribute("productid", productid);
+				request.setAttribute("commentList", commentList);
 				getServletContext().getRequestDispatcher("/profile.jsp")
 						.forward(request, response);
 				fullList = "";

@@ -22,14 +22,14 @@ import model.UserProd;
 /**
  * Servlet implementation class AddComment
  */
-@WebServlet("/GetCart")
-public class GetCart extends HttpServlet {
+@WebServlet("/GetAllCart")
+public class GetAllCart extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
 	/**
 	 * @see HttpServlet#HttpServlet()
 	 */
-	public GetCart() {
+	public GetAllCart() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
@@ -41,7 +41,7 @@ public class GetCart extends HttpServlet {
 	protected void doGet(HttpServletRequest request,HttpServletResponse response) throws ServletException, IOException {
 		HttpSession session = request.getSession(true);
 		long userid = 0;
-		long count=0;
+		long count;
 		String alert;
 		if (session.getAttribute("userid") == null) {
 			response.setContentType("text/html");
@@ -54,20 +54,18 @@ public class GetCart extends HttpServlet {
 			String fullList = "";
 			EntityManager em = DBUtil.getEmFactory().createEntityManager();
 //get the number of transaction			
-			TypedQuery<Long> query1 = em.createQuery("SELECT count(u) FROM UserProd u WHERE u.userId = :userid",Long.class);
-			query1.setParameter("userid", userid);
+			TypedQuery<Long> query1 = em.createQuery("SELECT count(u) FROM UserProd u",Long.class);
 			count= query1.getSingleResult();
 			
 			
 			
-			TypedQuery<UserProd> query2 = em.createQuery("SELECT u FROM UserProd u WHERE u.userId = :userid",UserProd.class);
-			query2.setParameter("userid", userid);
+			TypedQuery<UserProd> query2 = em.createQuery("SELECT u FROM UserProd u order by u.userId",UserProd.class);
 			List<UserProd> tranList;
 			try{
 				tranList=query2.getResultList();
 				if(tranList ==null ||tranList.isEmpty()){
 					tranList=null;
-					alert = "No items added!";
+					alert = "No transaction in database!";
 					// Set response content type
 					response.setContentType("text/html");
 
@@ -85,24 +83,22 @@ public class GetCart extends HttpServlet {
 						
 					
 						
-						fullList += "<li class=\"list-group-item\"><img src=\""
-							+ p.getPhotolink()
-							+ "\" style=\"width:120px;height:120px\"> <a href=\"GetProductDetail?id="
+						fullList += "<li class=\"list-group-item\"><a href=\"GetProductDetail?id="
 							+ p.getId()
 							+ "\">" + p.getPName() + "</a><br>  "
 							+ "<b>Price: $" + p.getPrice()
 							+ "</b><br>" + "Qty: "+tranList.get(i).getQuantity()
 							+ "<br>" + "</li>";
 					}
-					fullList += "<br><input type=\"submit\" name=\"submit\" Value=\"Summary\">";
+					//fullList += "<br><input type=\"submit\" name=\"submit\" Value=\"Summary\">";
 
 					// Set response content type
 					response.setContentType("text/html");
 
 					request.setAttribute("fullList", fullList);
-					request.setAttribute("count", count);
+					
 
-					getServletContext().getRequestDispatcher("/cartForm.jsp")
+					getServletContext().getRequestDispatcher("/AllCart.jsp")
 						.forward(request, response);
 					fullList = "";
 				}

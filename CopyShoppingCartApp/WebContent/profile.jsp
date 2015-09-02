@@ -1,6 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+			<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %><!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
  <title>Product Profile</title>
@@ -12,18 +14,31 @@
 <title>Post</title>
 </head>
 <body>
-<nav class="navbar navbar-default">
+<c:set var="user_type" scope="session" value="${user_type}" />
+<c:set var="userid" scope="session" value="${userid}" />
+<c:set var="productid" scope="session" value="${productid}" />
+	<nav class="navbar navbar-default">
 		<div class="container-fluid">
 			<div class="navbar-header">
-				<a class="navbar-brand" href="index.html">Shopping Cart</a>
+				<a class="navbar-brand" href="index.jsp">Shopping Cart</a>
 			</div>
 			<div>
+			<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+			<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 				<ul class="nav navbar-nav">
 						<li><a href="GetProduct">Product List</a></li>
-						<li><a href="GetCart">My Cart</a></li>
-						<li><a href="signin.html">Sign In</a></li>
-						<li><a href="signup.html">Sign Up</a></li>
+					<c:if test="${user_type == 'admin'}">
+						<li><a href="GetAllCart">All Carts</a></li>
 						<li><a href="SignOut">Sign Out</a></li>
+					</c:if>	
+					<c:if test="${user_type == 'regular'}">
+						<li><a href="GetCart">My Cart</a></li>
+						<li><a href="SignOut">Sign Out</a></li>
+					</c:if>
+					<c:if test="${user_type == null}">
+						<li><a href="signin.jsp">Sign In</a></li>
+						<li><a href="signup.jsp">Sign Up</a></li>
+					</c:if>
 				</ul>
 			</div>
 		</div>
@@ -36,6 +51,59 @@
    
 </ul>
 </div>
-<a href="index.html">Home</a><br><br>
+<h3><b>User Comments</b></h3>
+<c:forEach var="Cartcomment" items="${commentList}">
+<c:set var="star" value="${Cartcomment.star}" />
+<form class="form-horizontal" role="form">
+
+<% 
+
+%>
+
+		<li class=\"list-group-item\">
+		User ID: ${Cartcomment.userid}<br>
+		Review: ${Cartcomment.review}<br>
+		<c:if test="${star==1}">
+		Star: *
+		</c:if>
+		<c:if test="${star==2}">
+		Star: **
+		</c:if>
+		<c:if test="${star==3}">
+		Star: ***
+		</c:if>
+		<c:if test="${star==4}">
+		Star: ****
+		</c:if>
+		<c:if test="${star==5}">
+		Star: *****
+		</c:if>
+		</li>
+		<p>----------------------------------------------------</p>				
+</form><br>	
+	
+</c:forEach>
+
+
+
+
+<c:if test="${user_type != null}">
+	<form class="form-horizontal" role="form" method="get" action="AddComment">
+		<input type="hidden" name="productid" value="${productid}">
+		<input type="hidden" name="userid" value="${userid}">
+		<b>Comments: </b><br>
+		<textarea rows="4" cols="50" name="review" type="text"></textarea><br>
+		Star: <select name="star" >
+  				<option value="1">*</option>
+ 				<option value="2">**</option>
+ 				<option value="3">***</option>
+ 				<option value="4">****</option>
+ 				<option value="5">*****</option>
+			  </select>
+		<input type="submit" name="submit" value="Submit">
+</form>
+</c:if>
+
+<a href="index.jsp">Home</a><br><br>
 </body>
 </html>

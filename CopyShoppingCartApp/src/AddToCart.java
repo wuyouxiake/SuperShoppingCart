@@ -45,6 +45,7 @@ public class AddToCart extends HttpServlet {
 		EntityManager em = DBUtil.getEmFactory().createEntityManager();
 		String userid;
 		String productid = request.getParameter("productid");
+		System.out.println(productid);
 		long qty = Long.parseLong(request.getParameter("quantity"));
 		
 		if(session.getAttribute("userid")==null){
@@ -55,6 +56,7 @@ public class AddToCart extends HttpServlet {
 			.include(request, response);
 		}else{
 			userid=session.getAttribute("userid").toString();
+			
 			String qString = "select count(u) from UserProd u where u.userId=?1 and u.prodId=?2";
 			TypedQuery<Long> q = em.createQuery(qString, Long.class);
 			q.setParameter(1, Long.parseLong(userid));

@@ -1,4 +1,5 @@
 import java.io.IOException;
+import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
@@ -9,6 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import model.Cartuser;
+import model.UserProd;
 import postTools.DBUtil;
 
 /**
@@ -67,7 +69,9 @@ public class ValidateUser extends HttpServlet {
 				if (!password.equals(tempPass)) {
 					alert = "Password not valid!";
 				} else {
+					List<UserProd> cart;
 					alert = "Logged in";
+					request.getSession().setAttribute("user", user);
 					request.getSession().setAttribute("userid", userid);
 					request.getSession().setAttribute("user_type", usertype);
 				}

@@ -1,6 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %><!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
   <meta charset="utf-8">
@@ -11,27 +13,36 @@
 <title>Sccessful</title>
 </head>
 <body>
-<nav class="navbar navbar-default">
+<c:set var="user_type" scope="session" value="${user_type}" />
+	<nav class="navbar navbar-default">
 		<div class="container-fluid">
 			<div class="navbar-header">
-				<a class="navbar-brand" href="index.html">Shopping Cart</a>
+				<a class="navbar-brand" href="index.jsp">Shopping Cart</a>
 			</div>
 			<div>
+			
 				<ul class="nav navbar-nav">
 						<li><a href="GetProduct">Product List</a></li>
-						<li><a href="GetCart">My Cart</a></li>
-						<li><a href="signin.html">Sign In</a></li>
-						<li><a href="signup.html">Sign Up</a></li>
+					<c:if test="${user_type == 'admin'}">
+						<li><a href="GetAllCart">All Carts</a></li>
 						<li><a href="SignOut">Sign Out</a></li>
+					</c:if>	
+					<c:if test="${user_type == 'regular'}">
+						<li><a href="GetCart">My Cart</a></li>
+						<li><a href="SignOut">Sign Out</a></li>
+					</c:if>
+					<c:if test="${user_type == ''}">
+						<li><a href="signin.jsp">Sign In</a></li>
+						<li><a href="signup.jsp">Sign Up</a></li>
+					</c:if>
 				</ul>
 			</div>
 		</div>
 	</nav>
-
    ${alert}
    
  
 
-<a href="index.html">Home</a><br><br>
+<a href="index.jsp">Home</a><br><br>
 </body>
 </html>

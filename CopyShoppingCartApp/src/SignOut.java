@@ -41,6 +41,9 @@ public class SignOut extends HttpServlet {
 		String alert="You are logged out!";
 		HttpSession session = request.getSession(true);
 		request.getSession().removeAttribute("userid");
+		request.getSession().removeAttribute("user_type");
+		request.getSession().removeAttribute("user");
+		request.getSession().removeAttribute("productid");
 		request.setAttribute("alert", alert);
 
 		getServletContext().getRequestDispatcher("/signout.jsp").forward(
