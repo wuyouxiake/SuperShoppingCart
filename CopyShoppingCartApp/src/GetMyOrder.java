@@ -47,9 +47,10 @@ public class GetMyOrder extends HttpServlet {
 		long count=0;
 		String alert;
 		String fullList = null;
+		double subtotal=0;
 		EntityManager em = DBUtil.getEmFactory().createEntityManager();
 //get the number of orders.			
-					TypedQuery<Long> query = em.createQuery("SELECT count(m) FROM Myorder m WHERE m.userid = ?1",Long.class);
+					TypedQuery<Long> query = em.createQuery("SELECT count( distinct m.orderid) FROM Myorder m WHERE m.userid = ?1",Long.class);
 					query.setParameter(1, userid);
 					count= query.getSingleResult();
 					if(count==0){
@@ -77,11 +78,22 @@ public class GetMyOrder extends HttpServlet {
 							List<Myorder> thisOrder=tempQ.getResultList();
 							for(int j=0;j<thisOrder.size();j++){
 								TypedQuery<String> tempQ2 = em.createQuery("SELECT p.pName FROM Product p WHERE p.id = ?1",String.class);
-								tempQ2.setParameter(1, thisOrder.get(i).getProductid());
+								tempQ2.setParameter(1, thisOrder.get(j).getProductid());
 								String thisProductName=tempQ2.getSingleResult();
+								
+								TypedQuery<Long> tempQ4 = em.createQuery("SELECT p.price FROM Product p WHERE p.id = ?1",long.class);
+								tempQ4.setParameter(1, thisOrder.get(j).getProductid());
+								long thisProductPrice=tempQ4.getSingleResult();
+								subtotal+= thisProductPrice*thisOrder.get(j).getQuantity()*1.06;
+								double tax=0.06*thisProductPrice*thisOrder.get(j).getQuantity();
 								fullList+="<li class=\"list-group-item\">"
 										+thisProductName+"<br>"
-										+"Qty: "+thisOrder.get(i).getQuantity()+"<br></li>";
+										+"Price: "+thisProductPrice+"<br>"
+										+"Qty: "+thisOrder.get(j).getQuantity()+"<br>"
+										+"Sub-total: $"+thisProductPrice*thisOrder.get(j).getQuantity()+"<br>"
+										+"Tax: $"+tax+"<br>"
+										+"</li>";
+										
 							}
 							Date thisOrderDate = thisOrder.get(thisOrder.size()-1).getOrderdate();
 							TypedQuery<Payment> tempQ3 = em.createQuery("SELECT p FROM Payment p WHERE p.id = ?1",Payment.class);
@@ -95,7 +107,9 @@ public class GetMyOrder extends HttpServlet {
 									+"<b>Billing Address: </b><br>"
 									+pay.getBillingaddress()+"<br>"
 									+"<b>Order Date: </b><br>"
-									+thisOrderDate
+									+thisOrderDate+"<br>"
+									+"<b>Order Total: </b><br>"
+									+"$"+subtotal
 									+"</li><br>";
 									
 						}
