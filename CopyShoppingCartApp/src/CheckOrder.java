@@ -42,17 +42,17 @@ public class CheckOrder extends HttpServlet {
 		HttpSession session = request.getSession(true);
 		String fullList = "";
 		EntityManager em = DBUtil.getEmFactory().createEntityManager();
-		String userid=session.getAttribute("userid").toString();
+		long userid=(long) session.getAttribute("userid");
 		
 		String qString = "select count(u) from UserProd u where u.userId=?1";
 		TypedQuery<Long> q = em.createQuery(qString, Long.class);
-		q.setParameter(1, Long.parseLong(userid));
+		q.setParameter(1, userid);
 		float subtotal = 0;
 		long count=q.getSingleResult();
 		
 		String qString2 = "select u from UserProd u where u.userId=?1";
 		TypedQuery<UserProd> q2 = em.createQuery(qString2, UserProd.class);
-		q2.setParameter(1, Long.parseLong(userid));
+		q2.setParameter(1, userid);
 		List<UserProd> tranList=q2.getResultList();
 
 		for(int i=0;i<count;i++)
@@ -78,11 +78,11 @@ public class CheckOrder extends HttpServlet {
         }
 		String qString6 = "select count(b) from Balance b where b.userid=?1";
 		TypedQuery<Long> q6 = em.createQuery(qString6, Long.class);
-		q6.setParameter(1, Long.parseLong(userid));
+		q6.setParameter(1, userid);
 		if(q6.getSingleResult()!=0){
 			String qString5 = "select b.balance from Balance b where b.userid=?1";
 			TypedQuery<Double> q5 = em.createQuery(qString5, Double.class);
-			q5.setParameter(1, Long.parseLong(userid));
+			q5.setParameter(1, userid);
 			double blc = q5.getSingleResult();
 			float payable=(float) (subtotal-blc);
 			session.setAttribute("blc", blc);
@@ -90,7 +90,11 @@ public class CheckOrder extends HttpServlet {
 			session.setAttribute("payable", payable);
 		}else{
 			double blc=0;
-			float payable=(float) (subtotal-blc);
+			Balance balance=new Balance();
+			balance.setUserid(userid);
+			balance.setBalance(blc);
+			BalanceDB.insert(balance);
+			float payable=(float) (subtotal);
 			session.setAttribute("blc", blc);
 			request.setAttribute("blc", blc);
 			session.setAttribute("payable", payable);
@@ -109,7 +113,7 @@ public class CheckOrder extends HttpServlet {
 				getServletContext().getRequestDispatcher("/order.jsp")
 						.forward(request, response);
 				fullList = "";
-				
+				subtotal=0;
 		
 	}
 

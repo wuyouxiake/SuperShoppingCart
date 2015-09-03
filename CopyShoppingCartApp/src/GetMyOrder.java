@@ -100,6 +100,8 @@ public class GetMyOrder extends HttpServlet {
 							tempQ3.setParameter(1, orderid);
 							Payment pay=tempQ3.getSingleResult();
 							
+							
+							
 							fullList+="<li class=\"list-group-item\">"
 									+"<b>Card# "+pay.getCardnumber()+"</b><br>"
 									+"<b>Shipping Address: </b><br>"
@@ -109,10 +111,26 @@ public class GetMyOrder extends HttpServlet {
 									+"<b>Order Date: </b><br>"
 									+thisOrderDate+"<br>"
 									+"<b>Order Total: </b><br>"
-									+"$"+subtotal
-									+"</li><br>";
-									
+									+"$"+subtotal+"<br>";
+							double diff=subtotal-pay.getAmount();
+							if (diff<0.1){
+								//diff=0;
+								fullList+="<b>Credit: </b><br>"
+										+"$"+0+"<br>"
+										+"<b>Payment: </b><br>"
+										+"$"+pay.getAmount()+"<br>"
+										+"</li><br>";
+							}else{
+								fullList+="<b>Credit: </b><br>"
+										+"$"+(subtotal-pay.getAmount())+"<br>"
+										+"<b>Payment: </b><br>"
+										+"$"+pay.getAmount()+"<br>"
+										+"</li><br>";
+							}
+							
+							subtotal=0;		
 						}
+						
 					}
 					// Set response content type
 					response.setContentType("text/html");

@@ -51,7 +51,7 @@ public class Checkout extends HttpServlet {
 		String fullList = "";
 		EntityManager em = DBUtil.getEmFactory().createEntityManager();
 //Get value from session and request		
-		String userid = session.getAttribute("userid").toString();
+		long userid = (long) session.getAttribute("userid");
 		List<UserProd> tranList = (List<UserProd>) session.getAttribute("tranList");
 		float payable=(float) session.getAttribute("payable");
 //List<UserProd> tranList=(List<UserProd>) session.getAttribute("tranList");
@@ -89,7 +89,7 @@ public class Checkout extends HttpServlet {
 //Empty cart
 		String qString2 = "select u from UserProd u where u.userId=?1";
 		TypedQuery<UserProd> q2 = em.createQuery(qString2, UserProd.class);
-		q2.setParameter(1, Long.parseLong(userid));
+		q2.setParameter(1, userid);
 		List<UserProd> deleteList=q2.getResultList();
 		for(int i=0;i<deleteList.size();i++){
 			UserProd u=new UserProd();
@@ -99,12 +99,17 @@ public class Checkout extends HttpServlet {
 		
 		String alert2="Cart reset!";
 //Set balance to 0
-		String qString4 = "select b from Balance b where b.userid=?1";
-		TypedQuery<Balance> q4 = em.createQuery(qString4, Balance.class);
-		q4.setParameter(1, Long.parseLong(userid));
-		Balance blc=q4.getSingleResult();
-		blc.setBalance(0);
-		BalanceDB.update(blc);
+		double balance=(double) session.getAttribute("blc");
+		
+			String qString4 = "select b from Balance b where b.userid=?1";
+			TypedQuery<Balance> q4 = em.createQuery(qString4, Balance.class);
+			q4.setParameter(1, userid);
+			Balance blc=q4.getSingleResult();
+			blc.setBalance(0);
+			BalanceDB.update(blc);
+		
+		
+			
 
 		// Set response content type
 		response.setContentType("text/html");
@@ -116,7 +121,7 @@ public class Checkout extends HttpServlet {
 		fullList = "";
 		request.getSession().removeAttribute("blc");
 		request.getSession().removeAttribute("payable");
-		request.getSession().removeAttribute("subtotal");
+		request.getSession().removeAttribute("payable");
 
 	}
 
