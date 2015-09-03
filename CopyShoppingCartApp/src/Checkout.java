@@ -70,7 +70,7 @@ public class Checkout extends HttpServlet {
 		System.out.println(paymentid);
 		
 		long orderid=paymentid;
-		DateFormat dateFormat = new SimpleDateFormat("mm/dd/yyyy");
+		DateFormat dateFormat = new SimpleDateFormat("yyyy.MM.dd HH:mm:ss");
 		Date orderdate = new Date();
 		
 		for(int i=0;i<tranList.size();i++){

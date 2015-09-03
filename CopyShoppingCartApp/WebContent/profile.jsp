@@ -33,6 +33,7 @@
 					</c:if>	
 					<c:if test="${user_type == 'regular'}">
 						<li><a href="GetCart">My Cart</a></li>
+						<li><a href="GetMyOrder">My Order</a></li>
 						<li><a href="SignOut">Sign Out</a></li>
 					</c:if>
 					<c:if test="${user_type == null}">

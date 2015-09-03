@@ -2,7 +2,7 @@
     pageEncoding="ISO-8859-1"%>
 
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %><!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+			<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %><!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
   <meta charset="utf-8">
@@ -10,10 +10,11 @@
   <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
   <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
-<title>Order Submitted!</title>
+<title>My Order</title>
 </head>
 <body>
 <c:set var="user_type" scope="session" value="${user_type}" />
+<c:set var="count" scope="session" value="${count}" />
 	<nav class="navbar navbar-default">
 		<div class="container-fluid">
 			<div class="navbar-header">
@@ -41,9 +42,18 @@
 			</div>
 		</div>
 	</nav>
-  <h3> ${alert}</h3><br>
-    <h5>${alert2}</h5>
- 
+	<c:if test="${count == 1}">
+		<h4>You have 1 order</h4>
+	</c:if>
+	<c:if test="${count gt 1}">
+		<h4>You have ${count} orders</h4>
+	</c:if>
+	
+	
+<form class="form-horizontal" role="form" method="get">
+   ${fullList}
+   
+ </form>
 
 <a href="index.jsp">Home</a><br><br>
 </body>
