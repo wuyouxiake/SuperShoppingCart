@@ -40,7 +40,7 @@
 			</div>
 		</div>
 	</nav>
-<form class="form-horizontal" role="form" method="get" action="GetSummary">
+<form class="form-horizontal" role="form" method="get">
    ${fullList}
    
 </form>
