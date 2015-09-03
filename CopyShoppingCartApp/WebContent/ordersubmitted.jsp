@@ -26,6 +26,7 @@
 						<li><a href="GetProduct">Product List</a></li>
 					<c:if test="${user_type == 'admin'}">
 						<li><a href="GetAllCart">All Carts</a></li>
+						<li><a href="SendCredit.jsp">Send Credit</a></li>
 						<li><a href="SignOut">Sign Out</a></li>
 					</c:if>	
 					<c:if test="${user_type == 'regular'}">

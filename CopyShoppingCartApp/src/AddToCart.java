@@ -45,7 +45,6 @@ public class AddToCart extends HttpServlet {
 		EntityManager em = DBUtil.getEmFactory().createEntityManager();
 		String userid;
 		String productid = request.getParameter("productid");
-		System.out.println(productid);
 		long qty = Long.parseLong(request.getParameter("quantity"));
 		
 		if(session.getAttribute("userid")==null){

@@ -19,6 +19,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import postTools.DBUtil;
+import model.Balance;
 import model.Cartcomment;
 import model.Myorder;
 import model.Payment;
@@ -52,6 +53,7 @@ public class Checkout extends HttpServlet {
 //Get value from session and request		
 		String userid = session.getAttribute("userid").toString();
 		List<UserProd> tranList = (List<UserProd>) session.getAttribute("tranList");
+		float payable=(float) session.getAttribute("payable");
 //List<UserProd> tranList=(List<UserProd>) session.getAttribute("tranList");
 		long cardnumber=Long.parseLong(request.getParameter("cardnumber"));
 		String shippingaddress=request.getParameter("shippingaddress");
@@ -62,6 +64,7 @@ public class Checkout extends HttpServlet {
 		pay.setCardnumber(cardnumber);
 		pay.setShippingaddress(shippingaddress);
 		pay.setBillingaddress(billingaddress);
+		pay.setAmount(payable);
 		PaymentDB.insert(pay);
 //get the payment ID(The one that was just created)	and create order	
 		String qString = "select max(p.id) from Payment p";
@@ -95,6 +98,13 @@ public class Checkout extends HttpServlet {
 		}
 		
 		String alert2="Cart reset!";
+//Set balance to 0
+		String qString4 = "select b from Balance b where b.userid=?1";
+		TypedQuery<Balance> q4 = em.createQuery(qString4, Balance.class);
+		q4.setParameter(1, Long.parseLong(userid));
+		Balance blc=q4.getSingleResult();
+		blc.setBalance(0);
+		BalanceDB.update(blc);
 
 		// Set response content type
 		response.setContentType("text/html");
@@ -104,6 +114,9 @@ public class Checkout extends HttpServlet {
 
 		getServletContext().getRequestDispatcher("/ordersubmitted.jsp").forward(request, response);
 		fullList = "";
+		request.getSession().removeAttribute("blc");
+		request.getSession().removeAttribute("payable");
+		request.getSession().removeAttribute("subtotal");
 
 	}
 

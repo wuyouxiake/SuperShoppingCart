@@ -16,6 +16,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import postTools.DBUtil;
+import model.Balance;
 import model.Product;
 import model.UserProd;
 
@@ -75,6 +76,27 @@ public class CheckOrder extends HttpServlet {
             		
             subtotal+=p.getPrice()*tempQty*1.06;
         }
+		String qString6 = "select count(b) from Balance b where b.userid=?1";
+		TypedQuery<Long> q6 = em.createQuery(qString6, Long.class);
+		q6.setParameter(1, Long.parseLong(userid));
+		if(q6.getSingleResult()!=0){
+			String qString5 = "select b.balance from Balance b where b.userid=?1";
+			TypedQuery<Double> q5 = em.createQuery(qString5, Double.class);
+			q5.setParameter(1, Long.parseLong(userid));
+			double blc = q5.getSingleResult();
+			float payable=(float) (subtotal-blc);
+			session.setAttribute("blc", blc);
+			request.setAttribute("blc", blc);
+			session.setAttribute("payable", payable);
+		}else{
+			double blc=0;
+			float payable=(float) (subtotal-blc);
+			session.setAttribute("blc", blc);
+			request.setAttribute("blc", blc);
+			session.setAttribute("payable", payable);
+		}
+		
+		
 		
 		// Set response content type
 				response.setContentType("text/html");
@@ -82,6 +104,7 @@ public class CheckOrder extends HttpServlet {
 				request.setAttribute("fullList", fullList);
 				request.setAttribute("subtotal", subtotal);
 				session.setAttribute("tranList", tranList);
+				
 				
 				getServletContext().getRequestDispatcher("/order.jsp")
 						.forward(request, response);

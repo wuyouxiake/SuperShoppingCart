@@ -18,6 +18,8 @@ public class Payment implements Serializable {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
 
+	private double amount;
+
 	private String billingaddress;
 
 	private long cardnumber;
@@ -33,6 +35,14 @@ public class Payment implements Serializable {
 
 	public void setId(long id) {
 		this.id = id;
+	}
+
+	public double getAmount() {
+		return this.amount;
+	}
+
+	public void setAmount(double amount) {
+		this.amount = amount;
 	}
 
 	public String getBillingaddress() {

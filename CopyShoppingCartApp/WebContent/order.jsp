@@ -28,6 +28,7 @@
 						<li><a href="GetProduct">Product List</a></li>
 					<c:if test="${user_type == 'admin'}">
 						<li><a href="GetAllCart">All Carts</a></li>
+						<li><a href="SendCredit.jsp">Send Credit</a></li>
 						<li><a href="SignOut">Sign Out</a></li>
 					</c:if>	
 					<c:if test="${user_type == 'regular'}">
@@ -62,6 +63,8 @@
 </div>
 
 <p>Total: $${subtotal}</p>
+<p>Credit: $${blc}</p>
+<p>Payment Amount: $${payable}</p>
 <br>
 <div align="left">
 <form class="form-horizontal" role="form" method="get" action="Checkout">
