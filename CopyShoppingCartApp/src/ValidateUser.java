@@ -44,8 +44,8 @@ public class ValidateUser extends HttpServlet {
 		String alert = null;
 
 		try {
-			TypedQuery<Long> query = em.createQuery("SELECT COUNT(c) FROM Cartuser c WHERE c.username = :user_name",Long.class);
-			query.setParameter("user_name", user_name);
+			TypedQuery<Long> query = em.createQuery("SELECT COUNT(c) FROM Cartuser c WHERE c.username = ?1",Long.class);
+			query.setParameter(1, user_name);
 			long totalUser = query.getSingleResult();
 			if (totalUser <= 0) {
 				alert = "User does not exist!";

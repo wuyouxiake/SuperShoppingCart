@@ -22,14 +22,14 @@ import model.UserProd;
 /**
  * Servlet implementation class AddComment
  */
-@WebServlet("/PlaceOrder")
-public class PlaceOrder extends HttpServlet {
+@WebServlet("/CheckOrder")
+public class CheckOrder extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public PlaceOrder() {
+    public CheckOrder() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -66,8 +66,8 @@ public class PlaceOrder extends HttpServlet {
 			
 			
 			
-			fullList+="<tr><td><a href=\"GetProductDetail?p_name="
-            		+p.getPName().replace(" ", "%20")+"\">"+p.getPName()+"</a>  "
+			fullList+="<tr><td><a href=\"GetProductDetail?id="
+            		+p.getId()+"\">"+p.getPName()+"</a>  "
             		+"</td><td><b> $"+p.getPrice()+"</b></td><td>"
             		+tempQty+"</td><td>"
             		+" $"+tempQty*p.getPrice()*1.00+"</td><td>"
@@ -81,6 +81,7 @@ public class PlaceOrder extends HttpServlet {
 
 				request.setAttribute("fullList", fullList);
 				request.setAttribute("subtotal", subtotal);
+				session.setAttribute("tranList", tranList);
 				
 				getServletContext().getRequestDispatcher("/order.jsp")
 						.forward(request, response);

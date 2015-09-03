@@ -44,8 +44,8 @@
    ${fullList}
    
 </form>
-<form class="form-horizontal" role="form" method="get" action="PlaceOrder">
-<input type="submit" name="submit" value="Place Order">
+<form class="form-horizontal" role="form" method="get" action="CheckOrder">
+<input type="submit" name="submit" value="Check Order">
 </form>
 
 <form class="form-horizontal" role="form" method="get" action="emptyCart">

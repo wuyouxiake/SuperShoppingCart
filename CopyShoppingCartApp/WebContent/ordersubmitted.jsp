@@ -2,17 +2,15 @@
     pageEncoding="ISO-8859-1"%>
 
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-			<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %><!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %><!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
- <title>My Order</title>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
   <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
-<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>Order Summary</title>
+<title>Order Submitted!</title>
 </head>
 <body>
 <c:set var="user_type" scope="session" value="${user_type}" />
@@ -22,8 +20,7 @@
 				<a class="navbar-brand" href="index.jsp">Shopping Cart</a>
 			</div>
 			<div>
-			<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-			<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+			
 				<ul class="nav navbar-nav">
 						<li><a href="GetProduct">Product List</a></li>
 					<c:if test="${user_type == 'admin'}">
@@ -42,43 +39,10 @@
 			</div>
 		</div>
 	</nav>
-<div class="container">
-  <h2>My Order</h2>
-  <table class="table table-hover">
-    <thead>
-      <tr>
-        <th>Product Name</th>
-        <th>Price</th>
-        <th>Quantity</th>
-        <th>Subtotal</th>
-        <th>Tax</th>
-      </tr>
-    </thead>
-    <tbody>
-      ${fullList}
-    </tbody>
-  </table>
-</div>
+  <h3> ${alert}</h3><br>
+    <h5>${alert2}</h5>
+ 
 
-<p>Total: $${subtotal}</p>
-<br>
-<div align="left">
-<form class="form-horizontal" role="form" method="get" action="Checkout">
-<h3>Payment Method</h3>
-<label for="cardnumber">Card#: </label><br>
-<input type="text" name="cardnumber" required>
-<br><br>
-
-<label for="shippingaddress">Shipping Address: </label><br>
-<input type="text" name="shippingaddress" required>
-<br><br>
-
-<label for="billingaddress">Billing Address: </label><br>
-<input type="text" name="billingaddress">
-<br><br>
-
-<input type="submit" name="submit" Value="Confirm Order">
-</form>
-</div>
+<a href="index.jsp">Home</a><br><br>
 </body>
 </html>

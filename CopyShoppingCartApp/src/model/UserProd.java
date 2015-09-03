@@ -42,8 +42,8 @@ public class UserProd implements Serializable {
 		return this.prodId;
 	}
 
-	public void setProdId(long productid) {
-		this.prodId = productid;
+	public void setProdId(long prodId) {
+		this.prodId = prodId;
 	}
 
 	public long getQuantity() {
@@ -58,8 +58,8 @@ public class UserProd implements Serializable {
 		return this.userId;
 	}
 
-	public void setUserId(long userid) {
-		this.userId = userid;
+	public void setUserId(long userId) {
+		this.userId = userId;
 	}
 
 }
